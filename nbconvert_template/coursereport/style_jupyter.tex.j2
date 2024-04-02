@@ -1,0 +1,62 @@
+((*- extends 'latex/style_jupyter.tex.j2' -*))
+
+((*- block definitions -*))
+((( super() )))
+\newcounter{codecell}
+\newcommand{\codecaption}[1]{%
+  \refstepcounter{codecell}%
+  代码 \thecodecell: #1%
+}
+((*- endblock definitions -*))
+
+((* block draw_prompt -*))
+((* endblock draw_prompt -*))
+
+((* block input scoped *))
+    ((( draw_cell(cell.source | highlight_code(strip_verbatim=True), cell, '', 'incolor', '\\boxspacing') )))
+((* endblock input *))
+
+((* block execute_result scoped *))
+((*- for type in output.data | filter_data_type -*))
+((*- if type in ['text/plain']*))
+((( draw_cell(output.data['text/plain'] | wrap_text(charlim) | escape_latex | ansi2latex, cell, '', 'outcolor', '\\boxspacing') )))
+((*- endif -*))
+((* block data_priority scoped *))
+((( super() )))
+((* endblock *))
+((*- endfor -*))
+((* endblock execute_result *))
+
+((* block stream *))
+    \begin{Verbatim}[commandchars=\\\{\}]
+((( output.text | wrap_text(charlim) | escape_latex | strip_trailing_newline | ansi2latex )))
+    \end{Verbatim}
+\par\textbf{\textcolor{magenta}{Warning: Consider converting this output to a DataFrame format for better data manipulation.}}\par
+((* endblock stream *))
+
+((* macro draw_cell(text, cell, prompt, prompt_color, extra_space) -*))
+((*- set style = "breakable, size=fbox, boxrule=1pt, pad at break*=1mm, colback=cellbackground, colframe=cellborder"-*))
+((*- set hide = cell.metadata.get("hide", "") -*))
+((*- set caption = cell.metadata.get("codecaption", "") -*))
+((*- set label = cell.metadata.get("codelabel", "") -*))
+\begin{center}
+((*- if not hide -*))
+((*- if caption -*))
+\centering
+\codecaption{ ((( caption )))}
+((*- endif -*))
+((*- if label -*))\label{((( label )))}((*- endif -*))
+((*- endif -*))
+\begin{tcolorbox}[((( style )))]
+\begin{Verbatim}[commandchars=\\\{\}]
+((( text )))
+\end{Verbatim}
+\end{tcolorbox}
+\end{center}
+\vspace{10pt}
+\par
+((*- endmacro *))
+
+((* macro draw_prompt(cell, prompt, prompt_color, extra_space) -*))
+    % Do nothing to avoid rendering prompts
+((*- endmacro *))

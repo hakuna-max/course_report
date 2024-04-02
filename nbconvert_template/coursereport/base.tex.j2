@@ -1,0 +1,111 @@
+((*- extends 'latex/base.tex.j2' -*))
+
+((* block packages *))
+\usepackage{xeCJK}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{indentfirst}
+((( super() )))
+% 重置 caption 设置，以允许显示
+\captionsetup{format=default}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+((* endblock packages *))
+
+((* block definitions *))
+((( super() )))
+%\onehalfspacing % 设置1.5倍行距
+\doublespacing
+\setlength{\parindent}{2em} % 设置段落首行缩进为2个字符大小
+((* endblock definitions *))
+
+
+((* block title -*))
+((*- set nb_title = nb.metadata.get('title', '') -*))
+((*- set nb_subtitle = nb.metadata.get('subtitle', '') -*))
+\title{\textbf{((( nb_title | escape_latex ))) \\[20pt] \Large{((( nb_subtitle | escape_latex )))}} \\[25pt]}
+((*- endblock title *))
+
+
+((* block abstract *))
+((( make_abstract() )))
+((* endblock abstract *))
+
+((*- block input_group -*))
+((*- if not cell.metadata.get('hide', False) -*))
+((( super() )))
+((*- endif -*))
+((*- endblock input_group -*))
+
+((*- block markdowncell scoped -*))
+((*- if not cell.metadata.get('hide', False) -*))
+((*- if cell.source.startswith('![') -*))
+\begin{figure}[htbp]
+\centering
+((*- set image_path = cell.source.split('](')[1].rstrip(')') -*))
+\includegraphics[width=0.8\linewidth]{ (((image_path))) }
+\vspace{10pt}
+((*- if cell.metadata.figcaption -*))
+\caption{(((cell.metadata.figcaption)))}
+((*- else -*))
+\textbf{\\ \textcolor{magenta}{Warning: No caption specified. Please set a caption in the notebook metadata.}} \\
+((*- endif -*))
+((*- if cell.metadata.figlabel -*))
+\label{(((cell.metadata.figlabel)))}
+((*- endif -*))
+\end{figure}
+((*- else -*))
+((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'latex'))))
+((*- endif -*))
+((*- endif -*))
+((*- endblock markdowncell -*))
+
+((* block postdoc *))
+((( make_bibliography() )))
+((* endblock postdoc *))
+
+
+%===============================================================================
+% SUPPORT MACROS
+%===============================================================================
+% Add abstract and keywords
+((* macro make_abstract() *))
+((*- set nb_abstract = nb.metadata.get('abstract', '') -*))
+((*- set nb_keywords = nb.metadata.get('keywords', '') -*))
+\begin{center}
+((*- if nb_abstract: -*))
+ \parbox{0.8\columnwidth}{
+     \textbf{摘要：}(((nb_abstract)))}
+     \par\vspace{0.5cm}
+((*- endif -*))
+((*- if nb_keywords: -*))
+     \parbox{0.8\columnwidth}{\textbf{关键词：}(((nb_keywords)))}
+     \par\vspace{1cm}
+((*- endif -*))
+\end{center}
+((*- endmacro *))
+
+% Add bibliography
+((* macro make_bibliography() *))
+((* block bibliography *))
+((( add_bibstyle() ))) 
+((( add_bibfile() )))    
+((* endblock bibliography *))
+((* endmacro *))
+
+((* macro add_bibstyle() *))
+((*- set nb_bibstyle = nb.metadata.get('bibstyle', '') -*))
+((*- if nb_bibstyle: -*))
+\bibliographystyle{(((nb_bibstyle)))}	
+((*- else -*))
+\textbf{\textcolor{magenta}{Warning: No bibstyle specified. Please set a bibliography style in the notebook metadata.}} \\
+((*- endif -*))
+((* endmacro *))
+
+((* macro add_bibfile() *))
+((*- if nb.metadata["bibfile"]: -*))
+\bibliography{(((nb.metadata["bibfile"])))}
+((*- else -*))
+\noindent \textbf{\textcolor{magenta}{Warning: No bibfile specified. Please set a bibliography file in the notebook metadata.}}
+((*- endif -*))
+((* endmacro *))

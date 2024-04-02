@@ -1,0 +1,40 @@
+# personal matplotlib style sheet
+
+# Figure size
+figure.figsize : 12, 6
+
+# Font sizes
+axes.labelsize : 14
+axes.titlesize : 16
+xtick.labelsize : 12
+ytick.labelsize : 12
+legend.fontsize : 12
+font.size : 12
+
+# Legend and borders
+legend.frameon : True
+legend.framealpha : 1
+legend.edgecolor : black
+
+# Line widths and grid
+axes.linewidth : 1.25
+grid.linestyle : --
+grid.linewidth : 0.5
+
+# Color cycle
+axes.prop_cycle : cycler('color', ['k', 'gray', 'silver', 'rosybrown', 'lightcoral', 'firebrick'])
+
+# Font family
+font.family : serif
+font.serif : Times New Roman
+
+# Spines
+axes.spines.top : False
+axes.spines.right : False
+
+# Title alignment (might not work depending on the Matplotlib version)
+axes.titlelocation : left
+axes.titlepad : 20
+
+# Image resolution
+savefig.dpi : 300

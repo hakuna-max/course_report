@@ -1,0 +1,67 @@
+((*- extends 'latex/document_contents.tex.j2' -*))
+
+% Display a general warning instead of the specific error text
+((* block error *))
+\par\textbf{\textcolor{magenta}{Warning: There is an error in the output, please check your code carefully.}}\par
+((* endblock error *))
+((*- block traceback_line *))
+((*- endblock traceback_line *))
+
+% Display a warning message instead of the stream output
+((* block stream *))
+\begin{Verbatim}[commandchars=\\\{\}]
+\textit{((( output.text | escape_latex )))}
+\end{Verbatim}
+((* endblock stream *))
+
+((*- block data_png -*))
+((( draw_figures(output.metadata.filenames['image/png'],cell) )))
+((*- endblock -*))
+((*- block data_jpg -*))
+((( draw_figures(output.metadata.filenames['image/jpeg'],cell) )))
+((*- endblock -*))
+((*- block data_svg -*))
+((( draw_figures(output.metadata.filenames['image/svg+xml'],cell) )))
+((*- endblock -*))
+((*- block data_pdf -*))
+((( draw_figures(output.metadata.filenames['application/pdf'],cell) )))
+((*- endblock -*))
+
+((*- block data_latex -*))
+((( add_tables(output.data['text/latex'],cell) )))
+((*- endblock -*))
+
+
+((* macro add_tables(content,cell) -*))
+\begin{table}[htbp]
+\centering
+((*- if cell.metadata.tabcaption -*))
+\caption{((( cell.metadata.tabcaption )))}
+((*- else -*))
+\textbf{\textcolor{magenta}{Warning: No caption specified. Please set a caption in the cell metadata.\\}}
+((*- endif -*))
+((*- if cell.metadata.tablabel -*))
+\label{((( cell.metadata.tablabel )))}
+((*- endif -*))
+\vspace{5pt}
+\adjustbox{max size={0.9\linewidth}{0.9\paperheight}}{(((content)))}
+\end{table}
+((*- endmacro *))
+
+
+((* macro draw_figures(filename, cell) -*))
+((* set filename = filename | posix_path *))
+\begin{figure}[htbp]
+\centering
+\adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{((( filename )))}
+\vspace{10pt}
+((*- if cell.metadata.figcaption -*))
+\caption{((( cell.metadata.figcaption )))}
+((*- else -*))
+\textbf{\\ \textcolor{magenta}{Warning: No caption specified. Please set a caption in the cell metadata.\\}}
+((*- endif -*))
+((*- if cell.metadata.figlabel -*))
+\label{((( cell.metadata.figlabel )))}
+((*- endif -*))
+\end{figure}
+((*- endmacro *))

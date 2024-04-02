@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "dsa-report-template"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+notebook = "^7.1.2"
+jupyterlab = "^4.1.5"
+pybtex = "^0.24.0"
+setuptools = "^69.2.0"
+numpy = "^1.26.4"
+pandas = "^2.2.1"
+matplotlib = "^3.8.3"
+seaborn = "^0.13.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
