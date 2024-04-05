@@ -13,6 +13,9 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repsitory
+        uses: actions/checkout@v3
+
       - uses: google-github-actions/release-please-action@v4
         with:
           # this assumes that you have created a personal access token
@@ -21,4 +24,5 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           # this is a built-in strategy in release-please, see "Action Inputs"
           # for more options
-          release-type: simple
+          release-type: 'python'
+          package-name: 'course report template'
