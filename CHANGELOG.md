@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/hakuna-max/course_report/compare/v0.1.1...v0.2.0) (2024-04-05)
+
+
+### Features
+
+* updating page header and footer by using fancyhdr ([3bf2198](https://github.com/hakuna-max/course_report/commit/3bf21985915b2ec6e7462d0cd6f44d4795d3d89f))
+
 ## [0.1.1](https://github.com/hakuna-max/course_report/compare/v0.1.0...v0.1.1) (2024-04-05)
 
 
