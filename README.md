@@ -1,1 +1,1 @@
-使用方式请参考：[从编写到提交：使用Jupyter Notebook完成实验报告](https://hakuna.work/python/dsa/project/module/2024/03/30/preparing-your-with-jupyter-notebook.html)
+使用方式请参考：[从编写到提交：使用Jupyter Notebook完成实验报告](https://hakuna.work/posts/2024-03-30-preparing-your-report-with-notebook/)
