@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/hakuna-max/course_report/compare/v0.2.0...v0.3.0) (2024-04-12)
+
+
+### Features
+
+* create a template for bi course ([490fb52](https://github.com/hakuna-max/course_report/commit/490fb52485a8c75c7eda5e23e81c9ee8c69fea2f))
+
 ## [0.2.0](https://github.com/hakuna-max/course_report/compare/v0.1.1...v0.2.0) (2024-04-05)
 
 
