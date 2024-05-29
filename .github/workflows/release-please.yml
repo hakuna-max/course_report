@@ -13,57 +13,16 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repsitory
         uses: actions/checkout@v3
 
-      - name: Prepare Artifact
-        run: |
-          mkdir -p release-package
-          cp -r nbconvert_template release-package/
-          cp -r notebook release-package/
-          zip -r course-report-template.zip release-package
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+      - uses: google-github-actions/release-please-action@v4
         with:
-          name: course-report-template
-          path: course-report-template.zip
-
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: course-report-template
-          path: ./
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Run Release Please
-        id: release_please
-        uses: google-github-actions/release-please-action@v4
-        with:
+          # this assumes that you have created a personal access token
+          # (PAT) and configured it as a GitHub action secret named
+          # `RELEASE_PLEASE_TOKEN` (this secret name is not important).
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          # this is a built-in strategy in release-please, see "Action Inputs"
+          # for more options
           release-type: "python"
           package-name: "course report template"
-          command: "release-pr" # Make a release PR but do not make GitHub release
-
-      - name: Get Release Tag and Name
-        id: get_release_info
-        run: |
-          RELEASE_TAG=$(jq -r '.releases[] | select(.draft == false) | .tag_name' release-please-manifest.json)
-          RELEASE_NAME=$(jq -r '.releases[] | select(.draft == false) | .name' release-please-manifest.json)
-          echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
-          echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
-
-      - name: Create GitHub Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          RELEASE_TAG: ${{ env.RELEASE_TAG }}
-          RELEASE_NAME: ${{ env.RELEASE_NAME }}
-        run: |
-          gh release create "$RELEASE_TAG" course-report-template.zip -t "$RELEASE_NAME" -n "Release of $RELEASE_NAME"
