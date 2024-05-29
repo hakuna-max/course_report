@@ -13,16 +13,24 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repsitory
+      - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Prepare Artifact
+        run: |
+          mkdir -p release-package
+          cp -r nbconvert_template release-package/
+          cp -r notebook release-package/
+          tar -czvf release-package.zip release-package
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-package
+          path: release-package.zip
 
       - uses: google-github-actions/release-please-action@v4
         with:
-          # this assumes that you have created a personal access token
-          # (PAT) and configured it as a GitHub action secret named
-          # `RELEASE_PLEASE_TOKEN` (this secret name is not important).
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          # this is a built-in strategy in release-please, see "Action Inputs"
-          # for more options
-          release-type: 'python'
-          package-name: 'course report template'
+          release-type: "python"
+          package-name: "course report template"

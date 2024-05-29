@@ -5,6 +5,8 @@
 \usepackage{natbib}
 \usepackage{setspace}
 \usepackage{indentfirst}
+\usepackage[twoside]{fancyhdr}
+
 ((( super() )))
 % 重置 caption 设置，以允许显示
 \captionsetup{format=default}
@@ -20,17 +22,11 @@
 \setlength{\parindent}{2em} % 设置段落首行缩进为2个字符大小
 ((* endblock definitions *))
 
-
 ((* block title -*))
 ((*- set nb_title = nb.metadata.get('title', '') -*))
 ((*- set nb_subtitle = nb.metadata.get('subtitle', '') -*))
 \title{\textbf{((( nb_title | escape_latex ))) \\[20pt] \Large{((( nb_subtitle | escape_latex )))}} \\[25pt]}
 ((*- endblock title *))
-
-
-((* block abstract *))
-((( make_abstract() )))
-((* endblock abstract *))
 
 ((*- block input_group -*))
 ((*- if not cell.metadata.get('hide', False) -*))
@@ -61,9 +57,63 @@
 ((*- endif -*))
 ((*- endblock markdowncell -*))
 
+((* block predoc *))
+((* block maketitle *))
+\maketitle
+\thispagestyle{empty} % No page number on the title page
+((* endblock maketitle *))
+
+% Add an intentional blank page
+\newpage
+\thispagestyle{empty}
+\vspace*{0.3\textheight} % Adjust the vertical space to position the text
+\begin{center}
+     \textit{Intentional Blank Page}
+\end{center}
+\vfill
+\newpage
+
+((* block abstract *))
+\thispagestyle{empty} % No page number on the abstract page
+\vspace*{0.3\textheight} % Adjust the vertical space to position the text
+((( make_abstract() )))
+\vfill
+((* endblock abstract *))
+
+% Add another intentional blank page
+\newpage
+\thispagestyle{empty}
+\vspace*{0.3\textheight} % Adjust the vertical space to position the text
+\begin{center}
+     \textit{Intentional Blank Page}
+\end{center}
+\vfill
+\newpage
+
+% Set table of contents page style
+\pagestyle{plain}
+\renewcommand{\contentsname}{目录}
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+
+% Reset page numbering for the main content
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyhead[LE,RO]{\textbf{中国石油大学（华东）}} % Left side header on Even pages
+\fancyhead[LO,RE]{\textbf{((( nb.metadata.subtitle | escape_latex )))}}
+\fancyfoot{} % clear all footer fields
+\fancyfoot[LE,RO]{\footnotesize{\thepage}}
+\fancyfoot[RE,LO]{\textit{\footnotesize{((( nb.metadata.authors | join(', ', attribute='name') )))}}}
+((* endblock predoc *))
+
+
 ((* block postdoc *))
 ((( make_bibliography() )))
 ((* endblock postdoc *))
+
 
 
 %===============================================================================
