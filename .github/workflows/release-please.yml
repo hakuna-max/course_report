@@ -40,6 +40,9 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
       - name: Run Release Please
         id: release_please
         uses: google-github-actions/release-please-action@v4
@@ -49,10 +52,18 @@ jobs:
           package-name: "course report template"
           command: "release-pr" # Make a release PR but do not make GitHub release
 
+      - name: Get Release Tag and Name
+        id: get_release_info
+        run: |
+          RELEASE_TAG=$(jq -r '.releases[] | select(.draft == false) | .tag_name' release-please-manifest.json)
+          RELEASE_NAME=$(jq -r '.releases[] | select(.draft == false) | .name' release-please-manifest.json)
+          echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
+
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          RELEASE_TAG: ${{ env.RELEASE_TAG }}
+          RELEASE_NAME: ${{ env.RELEASE_NAME }}
         run: |
-          RELEASE_TAG=$(jq -r .tag_name <"$GITHUB_ENV")
-          RELEASE_NAME=$(jq -r .name <"$GITHUB_ENV")
           gh release create "$RELEASE_TAG" course-report-template.zip -t "$RELEASE_NAME" -n "Release of $RELEASE_NAME"
