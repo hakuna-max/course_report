@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/hakuna-max/course_report/compare/v0.5.0...v0.5.1) (2024-05-29)
+
+
+### Bug Fixes
+
+* corrected header/footer and double-page display issues ([0262a35](https://github.com/hakuna-max/course_report/commit/0262a35f40c952b4b1287fe81967c0f6259f043c))
+
 ## [0.5.0](https://github.com/hakuna-max/course_report/compare/v0.4.0...v0.5.0) (2024-05-29)
 
 
