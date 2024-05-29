@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/hakuna-max/course_report/compare/v0.4.0...v0.5.0) (2024-05-29)
+
+
+### Features
+
+* set up GitHub Actions workflow for selective packaging and release ([26f4997](https://github.com/hakuna-max/course_report/commit/26f49972d7fe304f211c159837768db60619ca43))
+
 ## [0.4.0](https://github.com/hakuna-max/course_report/compare/v0.3.1...v0.4.0) (2024-05-29)
 
 
